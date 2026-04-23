@@ -14,4 +14,7 @@ class Projectile {
   void Draw();
   bool IsOutOfBounds() const;
   bool IsActive() const;
+  Vector2 GetPosition() const;
+  float GetRadius() const;
+  void SetActive(bool active);
 };

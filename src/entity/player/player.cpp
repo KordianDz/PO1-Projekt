@@ -14,10 +14,6 @@ void Player::Draw() {
 
   position.x = Clamp(position.x, margin, GetScreenWidth() - margin);
 
-  if (IsKeyPressed(KEY_SPACE) && projectile_s.size() < projectileCountMax) {
-    projectile_s.emplace_back(Vector2(position));
-  }
-
   std::erase_if(projectile_s,
                 [](const Projectile& p) { return !p.IsActive(); });
 
@@ -26,4 +22,18 @@ void Player::Draw() {
   }
 
   DrawCircleV(position, 12, MAROON);
+}
+
+void Player::Shoot() {
+  if (projectile_s.size() < projectileCountMax) {
+    projectile_s.emplace_back(Vector2(position));
+  }
+}
+
+std::vector<Projectile>& Player::GetProjectiles() { return projectile_s; }
+
+void Player::RemoveProjectile(int index) {
+  if (index >= 0 && index < static_cast<int>(projectile_s.size())) {
+    projectile_s.erase(projectile_s.begin() + index);
+  }
 }

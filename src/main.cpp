@@ -3,6 +3,7 @@
 #include "gui/pause/pause.h"
 #include "entity/player/player.hpp"
 #include "entity/enemy/enemy.hpp"
+#include "utils/collision/collision.hpp"
 
 int main(void) {
   // Initialization
@@ -19,7 +20,9 @@ int main(void) {
   //----------------------------------------------------------
 
   Player player;
-  Enemy enemy;
+  std::vector<Enemy> enemies;
+  enemies.emplace_back();
+  CollisionManager collisionManager;
 
   // Main game loop
   while (!WindowShouldClose())  // Detect window close button or ESC key
@@ -27,6 +30,14 @@ int main(void) {
     framesCounter++;
 
     if (!PAUSE) {
+      if (IsKeyPressed(KEY_SPACE)) {
+        player.Shoot();
+      }
+
+      collisionManager.CheckProjectileEnemyCollisions(player.GetProjectiles(),
+                                                      enemies);
+
+      std::erase_if(enemies, [](const Enemy& e) { return e.IsDead(); });
     }
 
     BeginDrawing();
@@ -34,7 +45,10 @@ int main(void) {
       ClearBackground(RAYWHITE);
 
       player.Draw();
-      enemy.Draw();
+
+      for (auto& enemy : enemies) {
+        enemy.Draw();
+      }
 
       PauseMenu();
 

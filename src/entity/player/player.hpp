@@ -4,8 +4,9 @@
 #include <raylib.h>
 #include <raymath.h>
 #include "../projectile/projectile.hpp"
+#include <entity/entity.hpp>
 
-class Player {
+class Player : public Entity {
  private:
   Vector2 position =
       Vector2({ GetScreenWidth() / 2.0f, GetScreenHeight() - 24.0f });
@@ -21,4 +22,7 @@ class Player {
   ~Player();
 
   void Draw();
+  void Shoot();
+  std::vector<Projectile>& GetProjectiles();
+  void RemoveProjectile(int index);
 };

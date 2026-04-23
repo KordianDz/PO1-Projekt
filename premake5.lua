@@ -11,7 +11,7 @@ project "arkanoid"
 
     files { "**.cpp", "**.hpp", "**.h" }
 
-    includedirs { "." }
+    includedirs { "src" }
 
     links { "raylib" }
 

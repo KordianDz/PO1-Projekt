@@ -18,3 +18,9 @@ bool Projectile::IsOutOfBounds() const {
 }
 
 bool Projectile::IsActive() const { return active; }
+
+Vector2 Projectile::GetPosition() const { return position; }
+
+float Projectile::GetRadius() const { return 6.0f; }
+
+void Projectile::SetActive(bool active) { this->active = active; }
