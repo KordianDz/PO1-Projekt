@@ -4,8 +4,7 @@ Spawner::Spawner() {}
 
 Spawner::~Spawner() {}
 
-std::vector<Enemy> Spawner::SpawnWave(int rows, int cols)
-{
+std::vector<Enemy> Spawner::SpawnWave(int rows, int cols) {
   std::vector<Enemy> enemies;
 
   float enemyWidth = 30.0f;
@@ -19,13 +18,11 @@ std::vector<Enemy> Spawner::SpawnWave(int rows, int cols)
   float startX = (GetScreenWidth() - totalWidth) / 2.0f;
   float startY = 40.0f;
 
-  for (int row = 0; row < rows; row++)
-  {
-    for (int col = 0; col < cols; col++)
-    {
+  for (int row = 0; row < rows; row++) {
+    for (int col = 0; col < cols; col++) {
       float x = startX + col * (enemyWidth + paddingX);
       float y = startY + row * (enemyHeight + paddingY);
-      enemies.emplace_back(Vector2{x, y});
+      enemies.emplace_back(Vector2{ x, y }, (rows - row - 1));
     }
   }
 

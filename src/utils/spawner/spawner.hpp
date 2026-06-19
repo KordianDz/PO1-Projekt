@@ -3,6 +3,8 @@
 #include <raylib.h>
 #include "entity/enemy/enemy.hpp"
 
+
+// TODO: Niech używa template i służy również do spawnowania pocisków
 class Spawner
 {
  public:

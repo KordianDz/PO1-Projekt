@@ -5,11 +5,10 @@
 #include "../projectile/projectile.hpp"
 #include <entity/entity.hpp>
 
-class Enemy : public Entity
-{
+class Enemy : public Entity {
  private:
   float hp = 3;
-  std::vector<Color> color_s = {RED, ORANGE, BLUE};
+  std::vector<Color> color_s = { RED, ORANGE, BLUE };
   std::vector<Projectile> projectile_s = {};
   int projectileCountMax = 1;
 
@@ -19,11 +18,14 @@ class Enemy : public Entity
   float dropAmount = 5.0f;
 
  public:
-  static int moveDirection;    // 1 = prawo, -1 = lewo
-  static bool needsDropDown;   // flaga: czy wrogowie mają skoczyć w dół
+  static int moveDirection;   // 1 = prawo, -1 = lewo
+  static bool needsDropDown;  // flaga: czy wrogowie mają skoczyć w dół
+
+  bool canShoot = false;
+  int row = 0;
 
   Enemy();
-  Enemy(Vector2 pos);
+  Enemy(Vector2 postion, int row);
   ~Enemy();
 
   void Update();
@@ -31,7 +33,6 @@ class Enemy : public Entity
   void DropDown();
   void Shoot();
 
-  Vector2 GetPosition() const;
   float GetRadius() const;
   Rectangle GetBounds() const;
   void TakeDamage();

@@ -1,5 +1,6 @@
 #include <cstdlib>
 #include <ctime>
+#include <numeric>
 #include "raylib.h"
 #include "gui/pause/pause.h"
 #include "entity/player/player.hpp"
@@ -7,8 +8,7 @@
 #include "utils/collision/collision.hpp"
 #include "utils/spawner/spawner.hpp"
 
-int main(void)
-{
+int main(void) {
   // Initialization
   const int screenWidth = 800;
   const int screenHeight = 450;
@@ -33,11 +33,9 @@ int main(void)
   // Main game loop
   while (!WindowShouldClose())  // Detect window close button or ESC key
   {
-    if (!PAUSE && !gameOver && !gameWon)
-    {
+    if (!PAUSE && !gameOver && !gameWon) {
       // Strzelanie gracza
-      if (IsKeyPressed(KEY_SPACE))
-      {
+      if (IsKeyPressed(KEY_SPACE)) {
         player.Shoot();
       }
 
@@ -46,47 +44,55 @@ int main(void)
 
       // Update wrogów (ruch + strzelanie + pociski)
       Enemy::needsDropDown = false;
-      for (auto& enemy : enemies)
-      {
+      for (auto& enemy : enemies) {
         enemy.Update();
       }
 
       // Jeśli którykolwiek wróg dotknął krawędzi — wszyscy schodzą w dół
-      if (Enemy::needsDropDown)
-      {
+      if (Enemy::needsDropDown) {
         Enemy::moveDirection *= -1;
-        for (auto& enemy : enemies)
-        {
+        for (auto& enemy : enemies) {
           enemy.DropDown();
         }
       }
 
       // Kolizje: pocisk gracza -> wróg
-      collisionManager.CheckProjectileEnemyCollisions(player.GetProjectiles(), enemies);
+      collisionManager.CheckProjectileEnemyCollisions(player.GetProjectiles(),
+                                                      enemies);
 
       // Kolizje: pocisk wroga -> gracz
       collisionManager.CheckEnemyProjectilePlayerCollisions(enemies, player);
 
       // Zlicz zabitych wrogów i usuń martwych
-      int beforeCount = static_cast<int>(enemies.size());
+      score += std::accumulate(
+          enemies.begin(), enemies.end(), 0, [](int acc, const Enemy& e) {
+            return acc + (e.IsDead() ? 100 + 25 * e.row : 0);
+          });
       std::erase_if(enemies, [](const Enemy& e) { return e.IsDead(); });
-      int killed = beforeCount - static_cast<int>(enemies.size());
-      score += killed * 100;
+
+
+      // Pozwala na strzelanie najniższemu rzędowi
+      auto it = std::min_element(
+          enemies.begin(), enemies.end(),
+          [](const Enemy& a, const Enemy& b) { return a.row < b.row; });
+      if (it != enemies.end()) {
+        int minRow = it->row;
+        for (auto& e : enemies) {
+          if (e.row == minRow) e.canShoot = true;
+        }
+      }
 
       // Sprawdź warunki końca gry
-      if (player.IsDead())
-      {
+      if (player.IsDead()) {
         gameOver = true;
       }
-      if (enemies.empty())
-      {
+      if (enemies.empty()) {
         gameWon = true;
       }
     }
 
     // Restart gry klawiszem R
-    if ((gameOver || gameWon) && IsKeyPressed(KEY_R))
-    {
+    if ((gameOver || gameWon) && IsKeyPressed(KEY_R)) {
       gameOver = false;
       gameWon = false;
       score = 0;
@@ -103,27 +109,29 @@ int main(void)
 
       player.Draw();
 
-      for (auto& enemy : enemies)
-      {
+      for (auto& enemy : enemies) {
         enemy.Draw();
       }
 
       // HUD — wynik i życia
       DrawText(TextFormat("SCORE: %d", score), 10, 10, 20, DARKGRAY);
-      DrawText(TextFormat("HP: %.0f", player.GetHP()), screenWidth - 100, 10, 20, DARKGRAY);
+      DrawText(TextFormat("HP: %.0f", player.GetHP()), screenWidth - 100, 10,
+               20, DARKGRAY);
 
       // Ekran Game Over
-      if (gameOver)
-      {
-        DrawText("GAME OVER", screenWidth / 2 - 120, screenHeight / 2 - 30, 40, RED);
-        DrawText("Nacisnij R aby zagrac ponownie", screenWidth / 2 - 170, screenHeight / 2 + 20, 20, DARKGRAY);
+      if (gameOver) {
+        DrawText("GAME OVER", screenWidth / 2 - 120, screenHeight / 2 - 30, 40,
+                 RED);
+        DrawText("Nacisnij R aby zagrac ponownie", screenWidth / 2 - 170,
+                 screenHeight / 2 + 20, 20, DARKGRAY);
       }
 
       // Ekran wygranej
-      if (gameWon)
-      {
-        DrawText("YOU WIN!", screenWidth / 2 - 100, screenHeight / 2 - 30, 40, GREEN);
-        DrawText("Nacisnij R aby zagrac ponownie",  screenWidth / 2 - 170, screenHeight / 2 + 20, 20, DARKGRAY);
+      if (gameWon) {
+        DrawText("YOU WIN!", screenWidth / 2 - 100, screenHeight / 2 - 30, 40,
+                 GREEN);
+        DrawText("Nacisnij R aby zagrac ponownie", screenWidth / 2 - 170,
+                 screenHeight / 2 + 20, 20, DARKGRAY);
       }
 
       PauseMenu();

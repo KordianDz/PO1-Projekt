@@ -5,6 +5,7 @@
 #include "entity/enemy/enemy.hpp"
 #include "entity/player/player.hpp"
 
+// TODO: Tu ma być jedna funkcja Template Bo się zastrzelę
 class CollisionManager
 {
  public:

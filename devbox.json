@@ -21,7 +21,7 @@
       ],
       "dev": [
         "devbox run build",
-        "./bin/Debug/arkanoid"
+        "./bin/Debug/space-invaders"
       ],
       "test": [
         "echo \"Error: no test specified\" && exit 1"
