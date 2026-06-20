@@ -23,9 +23,10 @@ class Enemy : public Entity {
 
   bool canShoot = false;
   int row = 0;
+  int col = 0;
 
   Enemy();
-  Enemy(Vector2 postion, int row);
+  Enemy(Vector2 postion, int row, int col);
   ~Enemy();
 
   void Update();
