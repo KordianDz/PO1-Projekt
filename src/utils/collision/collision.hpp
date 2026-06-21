@@ -3,11 +3,24 @@
 #include <raylib.h>
 #include "entity/projectile/projectile.hpp"
 
-// Zmienione
+/**
+ * @brief Menedżer odpowiadający za rozwiązywanie kolizji w grze.
+ * 
+ * Wykorzystuje szablony (templates), aby generycznie sprawdzać kolizje 
+ * pomiędzy obiektami potrafiącymi strzelać (posiadającymi wektor Projectile)
+ * a obiektami będącymi celami (implementującymi GetBounds() i TakeDamage()).
+ */
 class CollisionManager
 {
  public:
-  // Wektor pociskow z wektorem celow
+  /**
+   * @brief Sprawdza kolizje pomiędzy wektorem strzelców a wektorem celów.
+   * 
+   * @tparam TShooter Typ obiektu strzelającego (np. Enemy).
+   * @tparam TTarget Typ obiektu celu (np. Bunker).
+   * @param shooters Referencja do wektora obiektów strzelających.
+   * @param targets Referencja do wektora obiektów będących celami.
+   */
   template <typename TShooter, typename TTarget>
   void CheckCollisions(std::vector<TShooter>& shooters, std::vector<TTarget>& targets)
   {
@@ -17,7 +30,14 @@ class CollisionManager
     }
   }
 
-  // Wektor pociskow z pojedynczym celem
+  /**
+   * @brief Sprawdza kolizje pomiędzy wektorem strzelców a pojedynczym celem.
+   * 
+   * @tparam TShooter Typ obiektu strzelającego (np. Enemy).
+   * @tparam TTarget Typ obiektu celu (np. Player).
+   * @param shooters Referencja do wektora obiektów strzelających.
+   * @param target Referencja do pojedynczego obiektu będącego celem.
+   */
   template <typename TShooter, typename TTarget>
   void CheckCollisions(std::vector<TShooter>& shooters, TTarget& target)
   {
@@ -44,7 +64,14 @@ class CollisionManager
     }
   }
 
-  // Pociski jednego strzelca z wektorem celow
+  /**
+   * @brief Sprawdza kolizje pomiędzy pojedynczym strzelcem a wektorem celów.
+   * 
+   * @tparam TShooter Typ obiektu strzelającego (np. Player).
+   * @tparam TTarget Typ obiektu celu (np. Enemy, Bunker).
+   * @param shooter Referencja do pojedynczego obiektu strzelającego.
+   * @param targets Referencja do wektora obiektów będących celami.
+   */
   template <typename TShooter, typename TTarget>
   void CheckCollisionsSingleShooter(TShooter& shooter, std::vector<TTarget>& targets)
   {

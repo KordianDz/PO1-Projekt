@@ -3,14 +3,34 @@
 #include <raylib.h>
 #include "entity/enemy/enemy.hpp"
 
-// Klasa spawnera
+/**
+ * @brief Klasa narzędziowa fabryki (Spawner) służąca do generowania bytów.
+ * 
+ * Odpowiada za tworzenie kolekcji obiektów (np. całych fal wrogów) i ustawianie
+ * ich na odpowiednich pozycjach w oparciu o szablony C++.
+ */
 class Spawner
 {
  public:
+  /**
+   * @brief Domyślny konstruktor spawnera.
+   */
   Spawner() = default;
+
+  /**
+   * @brief Domyślny destruktor spawnera.
+   */
   ~Spawner() = default;
 
-  // generowanie wielu obiektow
+  /**
+   * @brief Generyczna funkcja do masowego tworzenia identycznych obiektów.
+   * 
+   * @tparam T Typ obiektu do wygenerowania (np. Projectile, Bunker).
+   * @tparam Args Typy argumentów konstruktora obiektu T.
+   * @param count Liczba obiektów do utworzenia.
+   * @param args Argumenty przekazywane do konstruktora każdego obiektu.
+   * @return Wektor wygenerowanych obiektów.
+   */
   template <typename T, typename... Args>
   std::vector<T> Spawn(int count, Args&&... args)
   {
@@ -22,7 +42,13 @@ class Spawner
     return entities;
   }
 
-  // generowanie fali wrogow
+  /**
+   * @brief Generuje uporządkowaną falę wrogów (siatkę 2D).
+   * 
+   * @param rows Liczba rzędów wrogów.
+   * @param cols Liczba kolumn wrogów.
+   * @return Wektor zawierający falę wrogów ustawionych na pozycjach startowych.
+   */
   std::vector<Enemy> SpawnWave(int rows, int cols)
   {
     std::vector<Enemy> wave;

@@ -10,6 +10,18 @@
 #include "utils/collision/collision.hpp"
 #include "utils/spawner/spawner.hpp"
 
+/**
+ * @file main.cpp
+ * @brief Główny plik projektu z pętlą gry Space Invaders.
+ * 
+ * Zawiera inicjalizację okna (Raylib), instancjację bytów (gracz, wrogowie, bunkry),
+ * główną pętlę logiki oraz wywołania systemów rysowania i kolizji.
+ */
+
+/**
+ * @brief Główna funkcja programu.
+ * @return Kod zakończenia (0 w przypadku poprawnego zamknięcia).
+ */
 int main(void)
 {
   // Inicjalizacja gry
